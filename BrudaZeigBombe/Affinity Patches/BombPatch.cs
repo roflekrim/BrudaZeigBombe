@@ -70,6 +70,8 @@ internal class BombPatch : IAffinity, IDisposable
                 Object.Destroy(gameObject);
                 return;
             }
+            
+            gameObject.layer = _config.HmdOnly ? 24 : 8;
 
             if (gameObject.transform.parent.gameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
                 meshRenderer.sharedMaterial.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
@@ -92,7 +94,7 @@ internal class BombPatch : IAffinity, IDisposable
             Object.Destroy(sphereCollider);
 
         var diameter = BombCuttable(ref __instance).radius * 2;
-        go.layer = 8;
+        go.layer = _config.HmdOnly ? 24 : 8;
         go.name = "BZB_Highlight";
         go.transform.parent = __instance.noteTransform;
         go.transform.localScale = new Vector3(diameter, diameter, diameter);

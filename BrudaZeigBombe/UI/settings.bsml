@@ -3,4 +3,5 @@
     <color-setting text="Highlight Color" value="Color" apply-on-change="true" />
     <slider-setting text="Highlight Opacity" value="Opacity" min="0" max="1" increment="0.05" apply-on-change="true" />
     <bool-setting text="Always On Top" value="AlwaysOnTop" hover-hint="Highlight will be rendered on top of notes" apply-on-change="true" />
+    <bool-setting text="HMD Only" value="HmdOnly" hover-hint="Highlight will only be visible in the headset" apply-on-change="true" />    
 </settings-container>

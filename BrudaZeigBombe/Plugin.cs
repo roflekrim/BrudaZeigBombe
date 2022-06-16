@@ -23,6 +23,7 @@ public class Plugin
         zenjector.UseMetadataBinder<Plugin>();
 
         zenjector.Install<AppInstaller>(Location.App, _config);
+        zenjector.Install<GameInstaller>(Location.GameCore);
     }
 
     [OnEnable]
