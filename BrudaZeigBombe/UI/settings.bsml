@@ -2,4 +2,5 @@
     <bool-setting text="Enabled" value="Enabled" apply-on-change="true" />
     <color-setting text="Highlight Color" value="Color" apply-on-change="true" />
     <slider-setting text="Highlight Opacity" value="Opacity" min="0" max="1" increment="0.05" apply-on-change="true" />
+    <bool-setting text="Always On Top" value="AlwaysOnTop" hover-hint="Highlight will be rendered on top of notes" apply-on-change="true" />
 </settings-container>

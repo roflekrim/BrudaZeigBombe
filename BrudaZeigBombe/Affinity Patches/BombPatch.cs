@@ -46,7 +46,7 @@ internal class BombPatch : IAffinity, IDisposable
         _material.SetFloat(ShaderPropFresnelScaleID, 2f);
         _material.SetFloat(ShaderPropFresnelPowerID, 3.5f);
         _material.SetInt(ShaderPropCullModeID, (int) UnityEngine.Rendering.CullMode.Back);
-        _material.renderQueue = 2005;
+        _material.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
         
         _config.PropertyChanged.AddListener(ConfigChanged);
     }
@@ -58,6 +58,10 @@ internal class BombPatch : IAffinity, IDisposable
 
     private void ConfigChanged()
     {
+        _material.SetColor(ShaderPropColorID, _config.Color);
+        _material.SetFloat(ShaderPropAlphaID, _config.Opacity);
+        _material.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
+        
         _highlights = _highlights.Where(x => x != null).ToList();
         foreach (var gameObject in _highlights)
         {
@@ -67,9 +71,8 @@ internal class BombPatch : IAffinity, IDisposable
                 return;
             }
 
-            if (!gameObject.TryGetComponent<MeshRenderer>(out var renderer)) continue;
-            renderer.sharedMaterial.SetColor(ShaderPropColorID, _config.Color);
-            renderer.sharedMaterial.SetFloat(ShaderPropAlphaID, _config.Opacity);
+            if (gameObject.transform.parent.gameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
+                meshRenderer.sharedMaterial.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
         }
         
         if (!_config.Enabled)
@@ -99,5 +102,9 @@ internal class BombPatch : IAffinity, IDisposable
             component.sharedMaterial = _material;
         
         _highlights.Add(go);
+
+        if (!_config.AlwaysOnTop) return;
+        if (__instance.noteTransform.gameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
+            meshRenderer.sharedMaterial.renderQueue = 2005;
     }
 }
