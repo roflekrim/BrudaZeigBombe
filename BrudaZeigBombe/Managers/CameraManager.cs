@@ -26,6 +26,7 @@ internal class CameraManager : IInitializable, IDisposable
 
     public void Dispose()
     {
+        if (_mainCamera == null) return;
         _mainCamera.cullingMask &= ~(1 << 24);
     }
 }
