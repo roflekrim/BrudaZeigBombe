@@ -61,24 +61,21 @@ internal class BombPatch : IAffinity, IDisposable
         _material.SetColor(ShaderPropColorID, _config.Color);
         _material.SetFloat(ShaderPropAlphaID, _config.Opacity);
         _material.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
-        
-        _highlights = _highlights.Where(x => x != null).ToList();
+
+        if (!_config.Enabled)
+        {
+            _highlights.Where(x => x != null).ToList().ForEach(Object.Destroy);
+            _highlights.Clear();
+            return;
+        }
+
         foreach (var gameObject in _highlights)
         {
-            if (!_config.Enabled)
-            {
-                Object.Destroy(gameObject);
-                return;
-            }
-            
             gameObject.layer = _config.HmdOnly ? 24 : 8;
 
             if (gameObject.transform.parent.gameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
                 meshRenderer.sharedMaterial.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
         }
-        
-        if (!_config.Enabled)
-            _highlights.Clear();
     }
     
     [AffinityPostfix]
@@ -94,19 +91,18 @@ internal class BombPatch : IAffinity, IDisposable
             Object.Destroy(sphereCollider);
 
         var diameter = BombCuttable(ref __instance).radius * 2;
-        go.layer = _config.HmdOnly ? 24 : 8;
         go.name = "BZB_Highlight";
         go.transform.parent = __instance.noteTransform;
         go.transform.localScale = new Vector3(diameter, diameter, diameter);
         go.transform.localPosition = Vector3.zero;
+        go.layer = _config.HmdOnly ? 24 : 8;
 
         if (go.TryGetComponent<MeshRenderer>(out var component))
             component.sharedMaterial = _material;
         
         _highlights.Add(go);
-
-        if (!_config.AlwaysOnTop) return;
+        
         if (__instance.noteTransform.gameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
-            meshRenderer.sharedMaterial.renderQueue = 2005;
+            meshRenderer.sharedMaterial.renderQueue = _config.AlwaysOnTop ? 2005 : 2003;
     }
 }
