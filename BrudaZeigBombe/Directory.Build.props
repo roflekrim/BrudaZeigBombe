@@ -5,7 +5,7 @@
   <PropertyGroup>
     <AssemblyName>BrudaZeigBombe</AssemblyName>
     <Authors>roflekrim</Authors>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <GameVersion>1.23.0</GameVersion>
     <Description>Shows the hitbox of bombs</Description>
   </PropertyGroup>
